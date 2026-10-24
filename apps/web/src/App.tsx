@@ -1,12 +1,55 @@
 
-import { useState, type FormEvent } from "react";
+import { useEffect, useState, type FormEvent } from "react";
 import { motion } from "framer-motion";
-import HeroScene from "./HeroScene";
+
 
 const cargoTypes = ["General cargo", "Fragile goods", "Electronics", "Perishable goods", "Machinery", "Hazardous goods", "Oversized cargo", "Other"];
 const transportModes = ["Road", "Rail", "Air", "Sea"];
 const shipmentTypes = ["FTL", "LTL", "Parcel"];
 const packagingTypes = ["Carton", "Pallet", "Crate", "Drum", "Loose cargo"];
+
+
+const visualScenes = [
+  { title: "ROAD FREIGHT", subtitle: "THE JOURNEY STARTS HERE", image: "https://images.unsplash.com/photo-1601584115197-04ecc0da31d7?auto=format&fit=crop&w=1600&q=85", alt: "Freight truck travelling along an open highway" },
+  { title: "GLOBAL SHIPPING", subtitle: "CONNECTED ACROSS THE WATER", image: "https://images.unsplash.com/photo-1494412519320-aa613dfb7738?auto=format&fit=crop&w=1600&q=85", alt: "Cargo containers stacked at a shipping port" },
+  { title: "WAREHOUSE OPERATIONS", subtitle: "EVERY DETAIL IN MOTION", image: "https://images.unsplash.com/photo-1586528116311-ad8dd3c8310d?auto=format&fit=crop&w=1600&q=85", alt: "Organised warehouse storage and logistics operations" }
+];
+
+function CinematicSequence() {
+  const [activeScene, setActiveScene] = useState(0);
+  const [paused, setPaused] = useState(false);
+  useEffect(() => {
+    if (paused) return;
+    const timer = window.setInterval(() => setActiveScene(current => (current + 1) % visualScenes.length), 6500);
+    return () => window.clearInterval(timer);
+  }, [paused]);
+  return (
+    <div className="cinematic-sequence" aria-label="HAUL X logistics scenes">
+      <div className="cinematic-image-stage">
+        {visualScenes.map((scene, index) => (
+          <motion.img key={scene.image} className="cinematic-image" src={scene.image} alt={scene.alt}
+            initial={false} animate={{ opacity: activeScene === index ? 1 : 0, scale: activeScene === index ? 1.08 : 1.17 }}
+            transition={{ opacity: { duration: 1.1 }, scale: { duration: 7, ease: "linear" } }}
+            loading={index === 0 ? "eager" : "lazy"} draggable={false} />
+        ))}
+        <div className="cinematic-shade" />
+        <div className="cinematic-topline"><span>HAUL X / FIELD NOTES</span><span>0{activeScene + 1} — 0{visualScenes.length}</span></div>
+        <motion.div className="cinematic-caption" key={activeScene} initial={{ opacity: 0, y: 18 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: .65, delay: .15 }}>
+          <span>{visualScenes[activeScene].subtitle}</span><strong>{visualScenes[activeScene].title}</strong>
+        </motion.div>
+        <div className="cinematic-controls" aria-label="Choose logistics scene">
+          {visualScenes.map((scene, index) => (
+            <button key={scene.title} type="button" className={activeScene === index ? "scene-dot active" : "scene-dot"}
+              onClick={() => setActiveScene(index)} aria-label={`Show ${scene.title.toLowerCase()} scene`} aria-pressed={activeScene === index}>
+              <span>0{index + 1}</span><i />
+            </button>
+          ))}
+          <button type="button" className="scene-play" onClick={() => setPaused(value => !value)} aria-label={paused ? "Play scene sequence" : "Pause scene sequence"}>{paused ? "PLAY" : "PAUSE"}</button>
+        </div>
+      </div>
+    </div>
+  );
+}
 
 const reveal = {
   hidden: { opacity: 0, y: 45 },
@@ -134,7 +177,7 @@ export default function App() {
           </div>
 
           <div className="hero-visual">
-            <HeroScene />
+            <CinematicSequence />
             <div className="scene-label">HAUL X / FREIGHT IN MOTION</div>
             <div className="scene-coordinate">GLOBAL LOGISTICS NETWORK</div>
           </div>
