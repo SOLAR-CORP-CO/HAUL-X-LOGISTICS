@@ -1,6 +1,6 @@
 
 import { useEffect, useRef, useState, type FormEvent } from "react";
-import { motion, useScroll, useTransform } from "framer-motion";
+import { motion, useScroll, useSpring, useTransform } from "framer-motion";
 
 
 const cargoTypes = ["General cargo", "Fragile goods", "Electronics", "Perishable goods", "Machinery", "Hazardous goods", "Oversized cargo", "Other"];
@@ -56,33 +56,34 @@ function CinematicSequence() {
 function LogisticsStory() {
   const storyRef = useRef<HTMLElement>(null);
   const { scrollYProgress } = useScroll({ target: storyRef, offset: ["start start", "end end"] });
+  const smoothProgress = useSpring(scrollYProgress, { stiffness: 75, damping: 28, mass: 0.35 });
   const imageOpacities = [
-    useTransform(scrollYProgress, [0, .035, .16, .22], [1, 1, 0, 0]),
-    useTransform(scrollYProgress, [.15, .22, .34, .4], [0, 1, 1, 0]),
-    useTransform(scrollYProgress, [.33, .4, .53, .6], [0, 1, 1, 0]),
-    useTransform(scrollYProgress, [.53, .6, .73, .8], [0, 1, 1, 0]),
-    useTransform(scrollYProgress, [.73, .81, 1], [0, 1, 1])
+    useTransform(smoothProgress, [0, .035, .16, .22], [1, 1, 0, 0]),
+    useTransform(smoothProgress, [.15, .22, .34, .4], [0, 1, 1, 0]),
+    useTransform(smoothProgress, [.33, .4, .53, .6], [0, 1, 1, 0]),
+    useTransform(smoothProgress, [.53, .6, .73, .8], [0, 1, 1, 0]),
+    useTransform(smoothProgress, [.73, .81, 1], [0, 1, 1])
   ];
   const imageReveals = [
-    useTransform(scrollYProgress, [0, .22], ["inset(0 0% 0 0)", "inset(0 0% 0 0)"]),
-    useTransform(scrollYProgress, [.15, .24, .4], ["inset(0 100% 0 0)", "inset(0 0% 0 0)", "inset(0 0% 0 0)"]),
-    useTransform(scrollYProgress, [.33, .42, .6], ["inset(0 100% 0 0)", "inset(0 0% 0 0)", "inset(0 0% 0 0)"]),
-    useTransform(scrollYProgress, [.53, .62, .8], ["inset(0 100% 0 0)", "inset(0 0% 0 0)", "inset(0 0% 0 0)"]),
-    useTransform(scrollYProgress, [.73, .82, 1], ["inset(0 100% 0 0)", "inset(0 0% 0 0)", "inset(0 0% 0 0)"])
+    useTransform(smoothProgress, [0, .22], ["inset(0 0% 0 0)", "inset(0 0% 0 0)"]),
+    useTransform(smoothProgress, [.15, .24, .4], ["inset(0 100% 0 0)", "inset(0 0% 0 0)", "inset(0 0% 0 0)"]),
+    useTransform(smoothProgress, [.33, .42, .6], ["inset(0 100% 0 0)", "inset(0 0% 0 0)", "inset(0 0% 0 0)"]),
+    useTransform(smoothProgress, [.53, .62, .8], ["inset(0 100% 0 0)", "inset(0 0% 0 0)", "inset(0 0% 0 0)"]),
+    useTransform(smoothProgress, [.73, .82, 1], ["inset(0 100% 0 0)", "inset(0 0% 0 0)", "inset(0 0% 0 0)"])
   ];
   const imageScales = [
-    useTransform(scrollYProgress, [0, .22], [1.02, 1.12]),
-    useTransform(scrollYProgress, [.15, .4], [1.12, 1.02]),
-    useTransform(scrollYProgress, [.33, .6], [1.02, 1.12]),
-    useTransform(scrollYProgress, [.53, .8], [1.12, 1.02]),
-    useTransform(scrollYProgress, [.73, 1], [1.02, 1.08])
+    useTransform(smoothProgress, [0, .22], [1.02, 1.12]),
+    useTransform(smoothProgress, [.15, .4], [1.12, 1.02]),
+    useTransform(smoothProgress, [.33, .6], [1.02, 1.12]),
+    useTransform(smoothProgress, [.53, .8], [1.12, 1.02]),
+    useTransform(smoothProgress, [.73, 1], [1.02, 1.08])
   ];
   const imageDrifts = [
-    useTransform(scrollYProgress, [0, .22], [0, -34]),
-    useTransform(scrollYProgress, [.15, .4], [34, 0]),
-    useTransform(scrollYProgress, [.33, .6], [0, -34]),
-    useTransform(scrollYProgress, [.53, .8], [34, 0]),
-    useTransform(scrollYProgress, [.73, 1], [0, -18])
+    useTransform(smoothProgress, [0, .22], [0, -34]),
+    useTransform(smoothProgress, [.15, .4], [34, 0]),
+    useTransform(smoothProgress, [.33, .6], [0, -34]),
+    useTransform(smoothProgress, [.53, .8], [34, 0]),
+    useTransform(smoothProgress, [.73, 1], [0, -18])
   ];
   const beats = [
     { title: "From the first\nmile.", body: "A truck collects the shipment and starts the journey, connecting local roads to a much bigger network.", side: "left" },
@@ -92,18 +93,18 @@ function LogisticsStory() {
     { title: "One journey.\nEvery connection.", body: "Road, sea and air work together. HAUL X brings the moving parts into one clearer picture.", side: "center" }
   ];
   const opacities = [
-    useTransform(scrollYProgress, [0, .035, .16, .22], [0, 1, 1, 0]),
-    useTransform(scrollYProgress, [.16, .23, .34, .41], [0, 1, 1, 0]),
-    useTransform(scrollYProgress, [.35, .42, .54, .61], [0, 1, 1, 0]),
-    useTransform(scrollYProgress, [.55, .62, .74, .81], [0, 1, 1, 0]),
-    useTransform(scrollYProgress, [.75, .83, .96, 1], [0, 1, 1, 1])
+    useTransform(smoothProgress, [0, .035, .16, .22], [0, 1, 1, 0]),
+    useTransform(smoothProgress, [.16, .23, .34, .41], [0, 1, 1, 0]),
+    useTransform(smoothProgress, [.35, .42, .54, .61], [0, 1, 1, 0]),
+    useTransform(smoothProgress, [.55, .62, .74, .81], [0, 1, 1, 0]),
+    useTransform(smoothProgress, [.75, .83, .96, 1], [0, 1, 1, 1])
   ];
   const shifts = [
-    useTransform(scrollYProgress, [0, .08, .2], [32, 0, -24]),
-    useTransform(scrollYProgress, [.16, .25, .39], [32, 0, -24]),
-    useTransform(scrollYProgress, [.35, .44, .58], [32, 0, -24]),
-    useTransform(scrollYProgress, [.55, .64, .78], [32, 0, -24]),
-    useTransform(scrollYProgress, [.75, .85, 1], [24, 0, 0])
+    useTransform(smoothProgress, [0, .08, .2], [32, 0, -24]),
+    useTransform(smoothProgress, [.16, .25, .39], [32, 0, -24]),
+    useTransform(smoothProgress, [.35, .44, .58], [32, 0, -24]),
+    useTransform(smoothProgress, [.55, .64, .78], [32, 0, -24]),
+    useTransform(smoothProgress, [.75, .85, 1], [24, 0, 0])
   ];
   return (
     <section className="logistics-story" id="technology" ref={storyRef}>
@@ -204,70 +205,31 @@ export default function App() {
 
   return (
     <div className="app">
-      <motion.header
-        className="navbar"
-        initial={{ y: -80, opacity: 0 }}
-        animate={{ y: 0, opacity: 1 }}
-        transition={{ duration: 0.8 }}
-      >
-        <a className="brand" href="#">
-          <span className="mark">H</span>
-          <span>HAUL <b>X</b></span>
+      <motion.header className="navbar solar-navbar" initial={{ y: -50, opacity: 0 }} animate={{ y: 0, opacity: 1 }} transition={{ duration: 1, ease: [0.22, 1, 0.36, 1] }}>
+        <a className="brand solar-brand" href="#" aria-label="Solar Corporation home">
+          <img src="/solar-logo.jpg" alt="Solar Corporation" />
         </a>
-        <a className="nav-cta" href="#request">Get a quote ↗</a>
+        <nav className="nav-links" aria-label="Main navigation">
+          <a href="#">Home</a><a href="#services">Services</a><a href="#technology">Our journey</a><a href="#network">Network</a><a href="#request">Contact</a>
+        </nav>
+        <a className="nav-cta" href="#request">Get a quote <span>↗</span></a>
       </motion.header>
 
       <main>
-        <section className="hero">
-          <div className="hero-copy">
-            <motion.div
-              className="eyebrow"
-              initial={{ opacity: 0, x: -30 }}
-              animate={{ opacity: 1, x: 0 }}
-              transition={{ delay: 0.3 }}
-            >
-              LOGISTICS · CONNECTED · FORWARD
-            </motion.div>
-
-            <motion.h1
-              initial={{ opacity: 0, y: 55 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 1, delay: 0.4 }}
-            >
-              Move your world.
-              <span>Move it smarter.</span>
-            </motion.h1>
-
-            <motion.p
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              transition={{ delay: 0.9, duration: 1 }}
-            >
-              Logistics built around clarity, coordination and dependable
-              movement. Tell us what you need to move and our team can
-              review your request.
-            </motion.p>
-
-            <motion.a
-              className="primary-button"
-              href="#request"
-              whileHover={{ scale: 1.06, boxShadow: "0 0 35px #38bdf899" }}
-              whileTap={{ scale: 0.96 }}
-            >
-              Plan a shipment ↗
-            </motion.a>
-          </div>
-
-          <div className="hero-visual">
-            <CinematicSequence />
-            <div className="scene-label">HAUL X / FREIGHT IN MOTION</div>
-            <div className="scene-coordinate">GLOBAL LOGISTICS NETWORK</div>
-          </div>
-
-          <div className="hero-footer">
-            <span>01 / A smarter way to move</span>
-            <span>BUILT TO MOVE FORWARD</span>
-          </div>
+        <section className="hero solar-hero">
+          <div className="solar-hero-backdrop" role="img" aria-label="Solar Corporation's global logistics network: container, truck, ship and aircraft" />
+          <div className="solar-hero-vignette" />
+          <motion.div className="solar-hero-copy" initial={{ opacity: 0, y: 34 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 1.15, delay: .2, ease: [0.22, 1, 0.36, 1] }}>
+            <span className="solar-kicker">GLOBAL LOGISTICS</span>
+            <h1>MOVING<br/><em>A BRIGHTER</em><br/>TOMORROW</h1>
+            <p>End-to-end logistics solutions across land, sea and air — connecting businesses to a more sustainable future.</p>
+            <div className="solar-hero-actions">
+              <a className="primary-button" href="#request">Get a quote <span>↗</span></a>
+              <a className="story-play-link" href="#technology"><span>▶</span> Explore our journey</a>
+            </div>
+          </motion.div>
+          <div className="solar-hero-meta"><span>01 / CONTAINER</span><span>02 / LAND TRANSPORT</span><span>03 / SEA FREIGHT</span><span>04 / AIR FREIGHT</span></div>
+          <a className="solar-scroll-cue" href="#technology">SCROLL <span>↓</span></a>
         </section>
 
         <LogisticsStory />\n\n        <section className="stats-strip">
@@ -321,7 +283,7 @@ export default function App() {
           </div>
         </section>
 
-        <section className="network-section">
+        <section className="network-section" id="network">
           <Reveal>
             <div className="eyebrow">CONNECTED MOVEMENT / 02</div>
             <h2>Every route has a purpose.</h2>
