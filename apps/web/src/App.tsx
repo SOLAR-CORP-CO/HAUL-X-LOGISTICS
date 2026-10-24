@@ -1,6 +1,7 @@
 
 import { useEffect, useRef, useState, type FormEvent } from "react";
 import { motion, useScroll, useSpring, useTransform } from "framer-motion";
+import AdminPage from "./AdminPage";
 
 
 const cargoTypes = ["General cargo", "Fragile goods", "Electronics", "Perishable goods", "Machinery", "Hazardous goods", "Oversized cargo", "Other"];
@@ -154,6 +155,7 @@ function Reveal({ children, delay = 0 }: { children: React.ReactNode; delay?: nu
 }
 
 export default function App() {
+  if (window.location.pathname.replace(/\\/$/, "") === "/admin") return <AdminPage />;
   const [cargo, setCargo] = useState("General cargo");
   const [transport, setTransport] = useState("Road");
   const [shipment, setShipment] = useState("FTL");
@@ -187,15 +189,11 @@ export default function App() {
       notes: String(form.get("notes") || "").trim()
     };
     try {
-      const apiBase = (import.meta.env.VITE_API_URL || "").replace(/\\/$/, "");
-      const response = await fetch(`${apiBase}/api/enquiries`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(payload)
-      });
-      const result = await response.json().catch(() => ({}));
-      if (!response.ok) throw new Error(result.detail || "We couldn't submit your enquiry. Please try again.");
-      setSent(result.reference);
+      const reference = "HX-" + new Date().toISOString().slice(2,10).replaceAll("-", "") + "-" + Math.random().toString(36).slice(2,8).toUpperCase();
+      const rows = JSON.parse(localStorage.getItem("haulx-enquiries") || "[]");
+      rows.unshift({ ...payload, reference, status: "new", created_at: new Date().toISOString() });
+      localStorage.setItem("haulx-enquiries", JSON.stringify(rows.slice(0, 100)));
+      setSent(reference);
       formElement.reset();
       setCargo("General cargo");
       setTransport("Road");
