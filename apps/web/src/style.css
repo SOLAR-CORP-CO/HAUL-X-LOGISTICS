@@ -869,7 +869,7 @@ input::placeholder, textarea::placeholder {
 .solar-navbar .nav-cta span{color:#7bdcff;margin-left:12px}
 .solar-hero{height:min(900px,100svh);min-height:690px;padding:0 5.3%;display:flex;align-items:center;isolation:isolate;overflow:hidden;background:#030b14}
 .solar-hero::before{display:none}
-.solar-hero-backdrop{position:absolute;inset:0;z-index:-2;background-image:url('/solar-hero.webp');background-size:cover;background-position:center 52%;transform:scale(1.015);animation:solarHeroSettle 2.2s cubic-bezier(.2,.7,.2,1) both}
+.solar-hero-backdrop{position:absolute;inset:0;z-index:-2;background-image:url(var(--haulx-base)solar-hero.webp);background-size:cover;background-position:center 52%;transform:scale(1.015);animation:solarHeroSettle 2.2s cubic-bezier(.2,.7,.2,1) both}
 .solar-hero-vignette{position:absolute;inset:0;z-index:-1;background:linear-gradient(90deg,#020a12f2 0%,#020a12d9 24%,#020a1270 43%,transparent 72%),linear-gradient(0deg,#020a12c9 0%,transparent 25%,#020a1240 100%)}
 .solar-hero-copy{width:min(510px,42vw);margin-top:36px;position:relative;z-index:2}
 .solar-kicker{display:block;color:#b3c5d6;font-size:10px;letter-spacing:5px;margin-bottom:24px}
