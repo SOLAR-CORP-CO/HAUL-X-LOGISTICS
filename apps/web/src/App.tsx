@@ -59,11 +59,12 @@ export default function App() {
     setSent(true);
   }
 
-  function choices(items: string[], value: string, setter: (v: string) => void) {
+  function choices(items: string[], value: string, setter: (v: string) => void, label: string) {
     return (
       <div className="select-wrap">
         <select
           className="choice-select"
+          aria-label={label}
           value={value}
           onChange={(event) => setter(event.target.value)}
         >
@@ -264,13 +265,13 @@ export default function App() {
               <div className="form-divider" />
               <h3 className="form-heading">02 / Select your cargo</h3>
               <label className="section-label">Cargo category</label>
-              {choices(cargoTypes, cargo, setCargo)}
+              {choices(cargoTypes, cargo, setCargo, "Cargo category")}
               <label className="section-label">Transport mode</label>
-              {choices(transportModes, transport, setTransport)}
+              {choices(transportModes, transport, setTransport, "Transport mode")}
               <label className="section-label">Shipment type</label>
-              {choices(shipmentTypes, shipment, setShipment)}
+              {choices(shipmentTypes, shipment, setShipment, "Shipment type")}
               <label className="section-label">Packaging type</label>
-              {choices(packagingTypes, packaging, setPackaging)}
+              {choices(packagingTypes, packaging, setPackaging, "Packaging type")}
 
               <div className="form-divider" />
               <h3 className="form-heading">03 / Shipment measurements</h3>
