@@ -31,12 +31,12 @@ function CinematicSequence() {
         {visualScenes.map((scene, index) => (
           <motion.img key={scene.image} className="cinematic-image" src={scene.image} alt={scene.alt}
             initial={false} animate={{ opacity: activeScene === index ? 1 : 0, scale: activeScene === index ? 1.08 : 1.17 }}
-            transition={{ opacity: { duration: 1.2 }, scale: { duration: 7, ease: "linear" } }}
+            transition={{ opacity: { duration: 1.65, ease: [0.22, 1, 0.36, 1] }, scale: { duration: 8.5, ease: [0.22, 1, 0.36, 1] } }}
             loading={index === 0 ? "eager" : "lazy"} draggable={false} />
         ))}
         <div className="cinematic-shade" />
         <div className="cinematic-topline"><span>HAUL X / FIELD NOTES</span><span>0{activeScene + 1} — 0{visualScenes.length}</span></div>
-        <motion.div className="cinematic-caption" key={activeScene} initial={{ opacity: 0, y: 18 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: .65, delay: .15 }}>
+        <motion.div className="cinematic-caption" key={activeScene} initial={{ opacity: 0, y: 18 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: .9, delay: .12, ease: [0.22, 1, 0.36, 1] }}>
           <span>{visualScenes[activeScene].subtitle}</span><strong>{visualScenes[activeScene].title}</strong>
         </motion.div>
         <div className="cinematic-controls" aria-label="Choose logistics scene">
@@ -56,7 +56,7 @@ function CinematicSequence() {
 function LogisticsStory() {
   const storyRef = useRef<HTMLElement>(null);
   const { scrollYProgress } = useScroll({ target: storyRef, offset: ["start start", "end end"] });
-  const smoothProgress = useSpring(scrollYProgress, { stiffness: 75, damping: 28, mass: 0.35 });
+  const smoothProgress = useSpring(scrollYProgress, { stiffness: 52, damping: 32, mass: 0.8 });
   const imageOpacities = [
     useTransform(smoothProgress, [0, .035, .16, .22], [1, 1, 0, 0]),
     useTransform(smoothProgress, [.15, .22, .34, .4], [0, 1, 1, 0]),
@@ -146,7 +146,7 @@ function Reveal({ children, delay = 0 }: { children: React.ReactNode; delay?: nu
       initial="hidden"
       whileInView="visible"
       viewport={{ once: true, amount: 0.15 }}
-      transition={{ duration: 0.75, delay, ease: "easeOut" }}
+      transition={{ duration: 1, delay, ease: [0.22, 1, 0.36, 1] }}
     >
       {children}
     </motion.div>
@@ -267,8 +267,8 @@ export default function App() {
               <Reveal key={n} delay={i * 0.12}>
                 <motion.article
                   className="service-card"
-                  whileHover={{ y: -12, rotateX: 3, scale: 1.02 }}
-                  transition={{ type: "spring", stiffness: 220 }}
+                  whileHover={{ y: -7, rotateX: 1.5, scale: 1.012 }}
+                  transition={{ type: "spring", stiffness: 150, damping: 22, mass: 0.7 }}
                 >
                   <div className="card-top">
                     <span>{n}</span>
@@ -319,7 +319,8 @@ export default function App() {
               ["03", "Plan forward", "Receive a quote for your consideration."]
             ].map(([n, title, description], i) => (
               <Reveal key={n} delay={i * 0.15}>
-                <motion.div className="process-card" whileHover={{ y: -8 }}>
+                <motion.div className="process-card" whileHover={{ y: -5 }}
+                  transition={{ type: "spring", stiffness: 150, damping: 22, mass: 0.7 }}>
                   <span>{n}</span>
                   <h3>{title}</h3>
                   <p>{description}</p>
@@ -375,7 +376,7 @@ export default function App() {
                 <textarea name="notes" rows={3} placeholder="Anything else we should know?" />
               </label>
 
-              <motion.button className="submit-button" type="submit" whileHover={{ scale: 1.02 }} whileTap={{ scale: 0.98 }}>
+              <motion.button className="submit-button" type="submit" whileHover={{ scale: 1.015 }} whileTap={{ scale: 0.985 }} transition={{ type: "spring", stiffness: 180, damping: 20 }}>
                 Send shipment enquiry ↗
               </motion.button>
 
