@@ -396,9 +396,8 @@ export default function App() {
       </main>
 
       <footer className="footer">
-        <a className="brand" href="#">
-          <span className="mark">H</span>
-          <span>HAUL <b>X</b></span>
+        <a className="footer-solar-brand" href="#" aria-label="Solar Corporation home">
+          <img src="/solar-logo.webp" alt="Solar Corporation" />
         </a>
         <span>AN INITIATIVE BY SOLAR CORP.CO</span>
         <p>© {new Date().getFullYear()} HAUL X</p>
