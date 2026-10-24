@@ -63,6 +63,20 @@ function LogisticsStory() {
     useTransform(scrollYProgress, [.53, .6, .73, .8], [0, 1, 1, 0]),
     useTransform(scrollYProgress, [.73, .81, 1], [0, 1, 1])
   ];
+  const imageScales = [
+    useTransform(scrollYProgress, [0, .22], [1.02, 1.12]),
+    useTransform(scrollYProgress, [.15, .4], [1.12, 1.02]),
+    useTransform(scrollYProgress, [.33, .6], [1.02, 1.12]),
+    useTransform(scrollYProgress, [.53, .8], [1.12, 1.02]),
+    useTransform(scrollYProgress, [.73, 1], [1.02, 1.08])
+  ];
+  const imageDrifts = [
+    useTransform(scrollYProgress, [0, .22], [0, -34]),
+    useTransform(scrollYProgress, [.15, .4], [34, 0]),
+    useTransform(scrollYProgress, [.33, .6], [0, -34]),
+    useTransform(scrollYProgress, [.53, .8], [34, 0]),
+    useTransform(scrollYProgress, [.73, 1], [0, -18])
+  ];
   const beats = [
     { title: "From the first\nmile.", body: "A truck collects the shipment and starts the journey, connecting local roads to a much bigger network.", side: "left" },
     { title: "Across the\ncontainer network.", body: "At the terminal, cargo is sorted, secured and transferred for the next leg of its route.", side: "right" },
@@ -90,7 +104,7 @@ function LogisticsStory() {
         <div className="story-visual" aria-label="A continuous freight journey by truck, container, ship and aircraft">
           {visualScenes.map((scene, index) => (
             <motion.img key={scene.title} className={index === 4 ? "story-image story-network-image" : "story-image"}
-              src={scene.image} alt={scene.alt} style={{ opacity: imageOpacities[index] }} />
+              src={scene.image} alt={scene.alt} style={{ opacity: imageOpacities[index], scale: imageScales[index], y: imageDrifts[index] }} />
           ))}
           <div className="story-image-shade" />
           <div className="story-index"><span>HAUL X / THE JOURNEY</span><span>SCROLL TO EXPLORE</span></div>
@@ -100,7 +114,7 @@ function LogisticsStory() {
           {beats.map((beat, index) => (
             <motion.article key={beat.title} className={`story-beat story-beat-${beat.side}`} style={{ opacity: opacities[index], x: shifts[index] }}>
               <span className="eyebrow">0{index + 1} / THE HAUL X JOURNEY</span>
-              <h2>{beat.title.split("\\n").map((line) => <span key={line}>{line}</span>)}</h2>
+              <h2>{beat.title.split("\n").map((line) => <span key={line}>{line}</span>)}</h2>
               <p>{beat.body}</p>
               {index === 4 && <a className="story-link" href="#request">Plan a shipment <span>↗</span></a>}
             </motion.article>
