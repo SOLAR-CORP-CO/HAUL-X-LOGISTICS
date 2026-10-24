@@ -9,8 +9,9 @@ export default function HeroScene() {
     if (!root) return;
 
     const scene = new THREE.Scene();
-    const camera = new THREE.PerspectiveCamera(36, 1, 0.1, 100);
-    camera.position.set(0, 2.8, 9.5);
+    const camera = new THREE.PerspectiveCamera(34, 1, 0.1, 100);
+    camera.position.set(5.6, 3.35, 8.6);
+    camera.lookAt(0, 0.95, 0);
 
     const renderer = new THREE.WebGLRenderer({
       alpha: true,
@@ -82,12 +83,41 @@ export default function HeroScene() {
     cab.position.set(1.68, 1.08, 0);
     truck.add(cab);
 
+    // Front windshield and passenger-side window make the cab read clearly in 3D.
     const windshield = new THREE.Mesh(
-      new THREE.BoxGeometry(0.04, 0.65, 1.18),
+      new THREE.BoxGeometry(0.045, 0.65, 1.18),
       darkMat
     );
     windshield.position.set(2.22, 1.28, 0);
     truck.add(windshield);
+
+    const sideWindow = new THREE.Mesh(
+      new THREE.BoxGeometry(0.62, 0.42, 0.035),
+      darkMat
+    );
+    sideWindow.position.set(1.66, 1.42, 0.755);
+    truck.add(sideWindow);
+
+    const doorSeam = new THREE.Mesh(
+      new THREE.BoxGeometry(0.018, 0.82, 0.018),
+      darkMat
+    );
+    doorSeam.position.set(1.12, 1.02, 0.755);
+    truck.add(doorSeam);
+
+    const grille = new THREE.Mesh(
+      new THREE.BoxGeometry(0.045, 0.3, 0.52),
+      darkMat
+    );
+    grille.position.set(2.235, 0.76, 0);
+    truck.add(grille);
+
+    const bumper = new THREE.Mesh(
+      new THREE.BoxGeometry(0.22, 0.15, 1.58),
+      ribMat
+    );
+    bumper.position.set(2.27, 0.38, 0);
+    truck.add(bumper);
 
     const chassis = new THREE.Mesh(
       new THREE.BoxGeometry(5.15, 0.22, 1.35),
