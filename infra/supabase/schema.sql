@@ -23,18 +23,4 @@ create table if not exists public.admin_accounts (
 );
 alter table public.admin_accounts enable row level security;
 
--- Store only HMAC digests of OTPs. Codes expire after 10 minutes and are single-use.
-create table if not exists public.admin_password_resets (
- id uuid primary key default gen_random_uuid(),
- email text not null references public.admin_accounts(email) on delete cascade,
- otp_hash text not null,
- expires_at timestamptz not null,
- attempts integer not null default 0 check(attempts between 0 and 5),
- consumed_at timestamptz,
- created_at timestamptz not null default now()
-);
-create index if not exists admin_password_resets_email_created_idx
- on public.admin_password_resets(email, created_at desc);
-alter table public.admin_password_resets enable row level security;
-
--- No anon/authenticated policies are created. Backend access uses the service-role key only.
+-- Backend accesses admin credentials using the service-role key only. No public policies are created.
