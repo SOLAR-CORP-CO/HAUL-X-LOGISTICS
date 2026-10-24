@@ -11,7 +11,7 @@ Customer website, enquiry API and secure operations dashboard.
 
 ## Deploy the database and API
 1. Create a Supabase project and run the complete `infra/supabase/schema.sql` in its SQL Editor.
-2. Deploy this repository's `render.yaml` on Render. Configure `SUPABASE_URL`, `SUPABASE_SERVICE_ROLE_KEY`, `ADMIN_EMAIL`, `ADMIN_PASSWORD`, and `CORS_ORIGINS` (comma-separated exact origins for the customer and admin sites). Render generates `JWT_SECRET`.
+2. Deploy this repository's `render.yaml` on Render. Configure `SUPABASE_URL`, `SUPABASE_SERVICE_ROLE_KEY`, `ADMIN_EMAIL`, `ADMIN_INITIAL_PASSWORD`, and `CORS_ORIGINS` (comma-separated exact origins for the customer and admin sites). Render generates `JWT_SECRET`.
 3. Set `VITE_API_URL` to the deployed API URL in both frontend build environments. Build and deploy `apps/web` and `apps/admin` as separate static sites. Their output directories are `apps/web/dist` and `apps/admin/dist`.
 4. Sign in to the admin site using the configured admin email and a long unique password. Keep server secrets in hosting environment settings only.
 
@@ -29,4 +29,4 @@ Backend: `cd backend && pip install -r requirements.txt && uvicorn app.main:app 
 Customer site: `cd apps/web && npm install && npm run dev`.
 Admin: `cd apps/admin && npm install && npm run dev`.
 
-This is an enquiry-management system, not a confirmed booking, payment or live shipment-tracking system. Before public production launch, add operational monitoring, backups, admin account management and a review of security controls.
+This is an enquiry-management system, not a confirmed booking, payment or live shipment-tracking system. Password reset by email OTP is intentionally not included. If the admin password is lost, update `ADMIN_INITIAL_PASSWORD` in Render and follow the account re-initialization procedure. Before public production launch, add operational monitoring, backups and a review of security controls.
