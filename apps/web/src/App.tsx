@@ -158,31 +158,54 @@ export default function App() {
   const [transport, setTransport] = useState("Road");
   const [shipment, setShipment] = useState("FTL");
   const [packaging, setPackaging] = useState("Carton");
-  const [sent, setSent] = useState(false);
+  const [sent, setSent] = useState<string | null>(null);
+  const [submitting, setSubmitting] = useState(false);
+  const [submitError, setSubmitError] = useState("");
 
-  function handleSubmit(event: FormEvent<HTMLFormElement>) {
+  async function handleSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
-    const form = new FormData(event.currentTarget);
-
-    const details = [
-      `Customer: ${form.get("name")}`,
-      `Email: ${form.get("email")}`,
-      `Pickup: ${form.get("pickup")}`,
-      `Delivery: ${form.get("delivery")}`,
-      `Cargo category: ${cargo}`,
-      `Transport mode: ${transport}`,
-      `Shipment type: ${shipment}`,
-      `Packaging: ${packaging}`,
-      `Packages: ${form.get("quantity")}`,
-      `Weight: ${form.get("weight")} kg`,
-      `Dimensions: ${form.get("length")} × ${form.get("width")} × ${form.get("height")} cm`,
-      `Additional notes: ${form.get("notes") || "None"}`
-    ].join("\n");
-
-    window.location.href =
-      `mailto:solar.corporation.co@gmail.com?subject=${encodeURIComponent("HAUL X Shipment Enquiry")}&body=${encodeURIComponent(details)}`;
-
-    setSent(true);
+    if (submitting) return;
+    const formElement = event.currentTarget;
+    const form = new FormData(formElement);
+    setSubmitting(true);
+    setSubmitError("");
+    setSent(null);
+    const payload = {
+      customer_name: String(form.get("name") || "").trim(),
+      email: String(form.get("email") || "").trim(),
+      pickup: String(form.get("pickup") || "").trim(),
+      delivery: String(form.get("delivery") || "").trim(),
+      cargo_category: cargo,
+      transport_mode: transport,
+      shipment_type: shipment,
+      packaging_type: packaging,
+      quantity: Number(form.get("quantity")),
+      weight_kg: Number(form.get("weight")),
+      length_cm: form.get("length") ? Number(form.get("length")) : null,
+      width_cm: form.get("width") ? Number(form.get("width")) : null,
+      height_cm: form.get("height") ? Number(form.get("height")) : null,
+      notes: String(form.get("notes") || "").trim()
+    };
+    try {
+      const apiBase = (import.meta.env.VITE_API_URL || "").replace(/\\/$/, "");
+      const response = await fetch(`${apiBase}/api/enquiries`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(payload)
+      });
+      const result = await response.json().catch(() => ({}));
+      if (!response.ok) throw new Error(result.detail || "We couldn't submit your enquiry. Please try again.");
+      setSent(result.reference);
+      formElement.reset();
+      setCargo("General cargo");
+      setTransport("Road");
+      setShipment("FTL");
+      setPackaging("Carton");
+    } catch (error) {
+      setSubmitError(error instanceof Error ? error.message : "Something went wrong. Please try again.");
+    } finally {
+      setSubmitting(false);
+    }
   }
 
   function choices(items: string[], value: string, setter: (v: string) => void, label: string) {
@@ -376,16 +399,18 @@ export default function App() {
                 <textarea name="notes" rows={3} placeholder="Anything else we should know?" />
               </label>
 
-              <motion.button className="submit-button" type="submit" whileHover={{ scale: 1.015 }} whileTap={{ scale: 0.985 }} transition={{ type: "spring", stiffness: 180, damping: 20 }}>
-                Send shipment enquiry ↗
+              <motion.button className="submit-button" type="submit" disabled={submitting} whileHover={{ scale: submitting ? 1 : 1.015 }} whileTap={{ scale: submitting ? 1 : 0.985 }} transition={{ type: "spring", stiffness: 180, damping: 20 }}>
+                {submitting ? "Submitting enquiry…" : "Submit shipment enquiry ↗"}
               </motion.button>
 
               {sent && (
-                <p className="form-message">
-                  Your email app should open with your shipment enquiry.
-                  Please send the email to complete your request.
-                </p>
+                <div className="form-message" role="status" aria-live="polite">
+                  <strong>✓ Inquiry received successfully!</strong>
+                  <span>Thank you. Your enquiry has been saved and our team will review it.</span>
+                  <b>Reference ID: {sent}</b>
+                </div>
               )}
+              {submitError && <p className="form-error" role="alert">{submitError}</p>}
 
               <p className="form-note">
                 Submitting this form does not create a confirmed booking.
