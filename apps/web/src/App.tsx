@@ -10,9 +10,11 @@ const packagingTypes = ["Carton", "Pallet", "Crate", "Drum", "Loose cargo"];
 
 
 const visualScenes = [
-  { title: "ROAD FREIGHT", subtitle: "THE JOURNEY STARTS HERE", image: "https://images.unsplash.com/photo-1601584115197-04ecc0da31d7?auto=format&fit=crop&w=1600&q=85", alt: "Freight truck travelling along an open highway" },
-  { title: "GLOBAL SHIPPING", subtitle: "CONNECTED ACROSS THE WATER", image: "https://images.unsplash.com/photo-1494412519320-aa613dfb7738?auto=format&fit=crop&w=1600&q=85", alt: "Cargo containers stacked at a shipping port" },
-  { title: "WAREHOUSE OPERATIONS", subtitle: "EVERY DETAIL IN MOTION", image: "https://images.unsplash.com/photo-1586528116311-ad8dd3c8310d?auto=format&fit=crop&w=1600&q=85", alt: "Organised warehouse storage and logistics operations" }
+  { title: "ROAD FREIGHT", subtitle: "THE JOURNEY STARTS ON THE GROUND", image: "https://images.unsplash.com/photo-1601584115197-04ecc0da31d7?auto=format&fit=crop&w=1800&q=88", alt: "Freight truck travelling along an open highway" },
+  { title: "CONTAINER NETWORK", subtitle: "CARGO MOVES BETWEEN EVERY MODE", image: "https://images.unsplash.com/photo-1578575437130-527eed3abbec?auto=format&fit=crop&w=1800&q=88", alt: "Rows of shipping containers at a busy container terminal" },
+  { title: "OCEAN FREIGHT", subtitle: "ACROSS DISTANCES, ACROSS OCEANS", image: "https://images.unsplash.com/photo-1494412519320-aa613dfb7738?auto=format&fit=crop&w=1800&q=88", alt: "Cargo ship and stacked containers at an international port" },
+  { title: "AIR CARGO", subtitle: "WHEN THE FASTEST ROUTE TAKES FLIGHT", image: "https://images.unsplash.com/photo-1436491865332-7a61a109cc05?auto=format&fit=crop&w=1800&q=88", alt: "Commercial aircraft flying above the clouds" },
+  { title: "ONE CONNECTED JOURNEY", subtitle: "ROAD · SEA · AIR · WORKING TOGETHER", image: "https://images.unsplash.com/photo-1586528116311-ad8dd3c8310d?auto=format&fit=crop&w=1800&q=88", alt: "Logistics warehouse coordinating goods for onward transport" }
 ];
 
 function CinematicSequence() {
@@ -20,7 +22,7 @@ function CinematicSequence() {
   const [paused, setPaused] = useState(false);
   useEffect(() => {
     if (paused) return;
-    const timer = window.setInterval(() => setActiveScene(current => (current + 1) % visualScenes.length), 6500);
+    const timer = window.setInterval(() => setActiveScene(current => (current + 1) % visualScenes.length), 6200);
     return () => window.clearInterval(timer);
   }, [paused]);
   return (
@@ -29,7 +31,7 @@ function CinematicSequence() {
         {visualScenes.map((scene, index) => (
           <motion.img key={scene.image} className="cinematic-image" src={scene.image} alt={scene.alt}
             initial={false} animate={{ opacity: activeScene === index ? 1 : 0, scale: activeScene === index ? 1.08 : 1.17 }}
-            transition={{ opacity: { duration: 1.1 }, scale: { duration: 7, ease: "linear" } }}
+            transition={{ opacity: { duration: 1.2 }, scale: { duration: 7, ease: "linear" } }}
             loading={index === 0 ? "eager" : "lazy"} draggable={false} />
         ))}
         <div className="cinematic-shade" />
@@ -54,36 +56,42 @@ function CinematicSequence() {
 function LogisticsStory() {
   const storyRef = useRef<HTMLElement>(null);
   const { scrollYProgress } = useScroll({ target: storyRef, offset: ["start start", "end end"] });
-  const roadOpacity = useTransform(scrollYProgress, [0, .08, .23, .31], [1, 1, 0, 0]);
-  const seaOpacity = useTransform(scrollYProgress, [.2, .31, .48, .58], [0, 1, 1, 0]);
-  const warehouseOpacity = useTransform(scrollYProgress, [.48, .59, .76, .86], [0, 1, 1, 0]);
-  const networkOpacity = useTransform(scrollYProgress, [.76, .87, 1], [0, 1, 1]);
+  const imageOpacities = [
+    useTransform(scrollYProgress, [0, .035, .16, .22], [1, 1, 0, 0]),
+    useTransform(scrollYProgress, [.15, .22, .34, .4], [0, 1, 1, 0]),
+    useTransform(scrollYProgress, [.33, .4, .53, .6], [0, 1, 1, 0]),
+    useTransform(scrollYProgress, [.53, .6, .73, .8], [0, 1, 1, 0]),
+    useTransform(scrollYProgress, [.73, .81, 1], [0, 1, 1])
+  ];
   const beats = [
-    { range: [0, .2], title: "Movement,\nwithout limits.", body: "From the first mile to the final hand-off, every shipment deserves a clearer way forward.", side: "left" },
-    { range: [.25, .48], title: "Connected\nby design.", body: "Road, sea and air come together in one coordinated view of your cargo journey.", side: "right" },
-    { range: [.52, .75], title: "Precision in\nevery hand-off.", body: "Thoughtful handling and clear communication keep the details moving with the shipment.", side: "left" },
-    { range: [.8, 1], title: "Your next move\nstarts here.", body: "Tell us where it needs to go. We’ll help you plan the route ahead.", side: "center" }
+    { title: "From the first\nmile.", body: "A truck collects the shipment and starts the journey, connecting local roads to a much bigger network.", side: "left" },
+    { title: "Across the\ncontainer network.", body: "At the terminal, cargo is sorted, secured and transferred for the next leg of its route.", side: "right" },
+    { title: "Over open\nwater.", body: "Ships carry containers across oceans, linking ports, markets and destinations around the world.", side: "left" },
+    { title: "Up into the\nopen sky.", body: "For time-sensitive journeys, air cargo adds another connection to the same global supply chain.", side: "right" },
+    { title: "One journey.\nEvery connection.", body: "Road, sea and air work together. HAUL X brings the moving parts into one clearer picture.", side: "center" }
   ];
   const opacities = [
-    useTransform(scrollYProgress, [0, .04, .17, .23], [0, 1, 1, 0]),
-    useTransform(scrollYProgress, [.22, .29, .43, .51], [0, 1, 1, 0]),
-    useTransform(scrollYProgress, [.49, .56, .7, .78], [0, 1, 1, 0]),
-    useTransform(scrollYProgress, [.77, .84, .96, 1], [0, 1, 1, 1])
+    useTransform(scrollYProgress, [0, .035, .16, .22], [0, 1, 1, 0]),
+    useTransform(scrollYProgress, [.16, .23, .34, .41], [0, 1, 1, 0]),
+    useTransform(scrollYProgress, [.35, .42, .54, .61], [0, 1, 1, 0]),
+    useTransform(scrollYProgress, [.55, .62, .74, .81], [0, 1, 1, 0]),
+    useTransform(scrollYProgress, [.75, .83, .96, 1], [0, 1, 1, 1])
   ];
   const shifts = [
     useTransform(scrollYProgress, [0, .08, .2], [32, 0, -24]),
-    useTransform(scrollYProgress, [.22, .3, .48], [32, 0, -24]),
-    useTransform(scrollYProgress, [.49, .57, .75], [32, 0, -24]),
-    useTransform(scrollYProgress, [.77, .85, 1], [24, 0, 0])
+    useTransform(scrollYProgress, [.16, .25, .39], [32, 0, -24]),
+    useTransform(scrollYProgress, [.35, .44, .58], [32, 0, -24]),
+    useTransform(scrollYProgress, [.55, .64, .78], [32, 0, -24]),
+    useTransform(scrollYProgress, [.75, .85, 1], [24, 0, 0])
   ];
   return (
     <section className="logistics-story" id="technology" ref={storyRef}>
       <div className="story-sticky">
-        <div className="story-visual" aria-label="Road, ocean freight and warehouse logistics imagery">
-          <motion.img className="story-image" src={visualScenes[0].image} alt="Freight truck moving along a highway" style={{ opacity: roadOpacity }} />
-          <motion.img className="story-image" src={visualScenes[1].image} alt="Cargo containers aboard a global shipping vessel" style={{ opacity: seaOpacity }} />
-          <motion.img className="story-image" src={visualScenes[2].image} alt="Modern warehouse operations" style={{ opacity: warehouseOpacity }} />
-          <motion.img className="story-image story-network-image" src={visualScenes[1].image} alt="A global freight network connecting destinations" style={{ opacity: networkOpacity }} />
+        <div className="story-visual" aria-label="A continuous freight journey by truck, container, ship and aircraft">
+          {visualScenes.map((scene, index) => (
+            <motion.img key={scene.title} className={index === 4 ? "story-image story-network-image" : "story-image"}
+              src={scene.image} alt={scene.alt} style={{ opacity: imageOpacities[index] }} />
+          ))}
           <div className="story-image-shade" />
           <div className="story-index"><span>HAUL X / THE JOURNEY</span><span>SCROLL TO EXPLORE</span></div>
           <div className="story-progress"><motion.i style={{ scaleX: scrollYProgress }} /></div>
@@ -91,14 +99,14 @@ function LogisticsStory() {
         <div className="story-copy-layer">
           {beats.map((beat, index) => (
             <motion.article key={beat.title} className={`story-beat story-beat-${beat.side}`} style={{ opacity: opacities[index], x: shifts[index] }}>
-              <span className="eyebrow">0{index + 1} / THE HAUL X APPROACH</span>
-              <h2>{beat.title.split("\n").map((line) => <span key={line}>{line}</span>)}</h2>
+              <span className="eyebrow">0{index + 1} / THE HAUL X JOURNEY</span>
+              <h2>{beat.title.split("\\n").map((line) => <span key={line}>{line}</span>)}</h2>
               <p>{beat.body}</p>
-              {index === 3 && <a className="story-link" href="#request">Plan a shipment <span>↗</span></a>}
+              {index === 4 && <a className="story-link" href="#request">Plan a shipment <span>↗</span></a>}
             </motion.article>
           ))}
         </div>
-        <div className="story-bottom-note">ROAD FREIGHT <i /> OCEAN CARGO <i /> WAREHOUSE OPERATIONS</div>
+        <div className="story-bottom-note">ROAD FREIGHT <i /> CONTAINERS <i /> OCEAN FREIGHT <i /> AIR CARGO</div>
       </div>
     </section>
   );
