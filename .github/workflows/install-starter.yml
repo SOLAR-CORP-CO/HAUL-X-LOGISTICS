@@ -13,7 +13,6 @@ jobs:
       - name: Check out repository
         uses: actions/checkout@v4
         with:
-          ref: main
           fetch-depth: 0
 
       - name: Extract starter project
@@ -22,6 +21,14 @@ jobs:
           mkdir -p /tmp/haulx-starter
           unzip -q HAUL-X-STARTER-DOWNLOAD.zip -d /tmp/haulx-starter
           test -d /tmp/haulx-starter/haul-x-platform
+
+      - name: Synchronize with GitHub
+        run: |
+          git fetch origin main
+          git reset --hard origin/main
+
+      - name: Install project files
+        run: |
           cp -a /tmp/haulx-starter/haul-x-platform/. .
 
       - name: Commit starter files
@@ -33,6 +40,5 @@ jobs:
             echo "No file changes to commit."
           else
             git commit -m "Update HAUL X website"
-            git pull --rebase origin main
             git push origin main
           fi
