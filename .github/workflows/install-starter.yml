@@ -1,0 +1,44 @@
+name: Install HAUL X starter project
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  install:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Extract starter project
+        run: |
+          test -f HAUL-X-STARTER-DOWNLOAD.zip
+          mkdir -p /tmp/haulx-starter
+          unzip -q HAUL-X-STARTER-DOWNLOAD.zip -d /tmp/haulx-starter
+          test -d /tmp/haulx-starter/haul-x-platform
+
+      - name: Synchronize with GitHub
+        run: |
+          git fetch origin main
+          git reset --hard origin/main
+
+      - name: Install project files
+        run: |
+          cp -a /tmp/haulx-starter/haul-x-platform/. .
+
+      - name: Commit starter files
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add -A
+          if git diff --cached --quiet; then
+            echo "No file changes to commit."
+          else
+            git commit -m "Update HAUL X website"
+            git push origin main
+          fi
