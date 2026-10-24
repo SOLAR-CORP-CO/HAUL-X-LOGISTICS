@@ -541,33 +541,50 @@ input::placeholder, textarea::placeholder {
   font-weight: 700;
 }
 
-.choice-grid {
-  display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
-  gap: 11px;
+.select-wrap {
+  position: relative;
+  width: 100%;
+  max-width: 100%;
 }
 
-.choice-card {
-  padding: 15px 10px;
-  border: 1px solid #ffffff1c;
+.choice-select {
+  appearance: none;
+  -webkit-appearance: none;
+  width: 100%;
+  min-height: 56px;
+  padding: 15px 48px 15px 17px;
+  border: 1px solid #ffffff24;
   border-radius: 10px;
-  background: #0a1929;
-  color: #c6d7e9;
+  background: linear-gradient(135deg, #10263c, #0a1929);
+  color: #edf5ff;
+  font: inherit;
+  font-size: 14px;
+  font-weight: 600;
   cursor: pointer;
-  text-align: left;
-  font-size: 13px;
-  transition: background .25s, border-color .25s, color .25s;
+  outline: none;
+  transition: border-color .2s, box-shadow .2s, background .2s;
 }
 
-.choice-card:hover {
+.choice-select:hover,
+.choice-select:focus-visible {
   border-color: var(--blue);
+  box-shadow: 0 0 0 3px #38bdf81c;
 }
 
-.choice-card.selected {
-  background: #0e4262;
-  border-color: var(--blue);
-  color: white;
-  box-shadow: 0 0 22px #38bdf822;
+.choice-select option {
+  color: #edf5ff;
+  background: #0a1929;
+}
+
+.select-chevron {
+  position: absolute;
+  top: 50%;
+  right: 18px;
+  transform: translateY(-58%);
+  color: var(--blue);
+  font-size: 23px;
+  line-height: 1;
+  pointer-events: none;
 }
 
 .notes-label {
