@@ -63,6 +63,13 @@ function LogisticsStory() {
     useTransform(scrollYProgress, [.53, .6, .73, .8], [0, 1, 1, 0]),
     useTransform(scrollYProgress, [.73, .81, 1], [0, 1, 1])
   ];
+  const imageReveals = [
+    useTransform(scrollYProgress, [0, .22], ["inset(0 0% 0 0)", "inset(0 0% 0 0)"]),
+    useTransform(scrollYProgress, [.15, .24, .4], ["inset(0 100% 0 0)", "inset(0 0% 0 0)", "inset(0 0% 0 0)"]),
+    useTransform(scrollYProgress, [.33, .42, .6], ["inset(0 100% 0 0)", "inset(0 0% 0 0)", "inset(0 0% 0 0)"]),
+    useTransform(scrollYProgress, [.53, .62, .8], ["inset(0 100% 0 0)", "inset(0 0% 0 0)", "inset(0 0% 0 0)"]),
+    useTransform(scrollYProgress, [.73, .82, 1], ["inset(0 100% 0 0)", "inset(0 0% 0 0)", "inset(0 0% 0 0)"])
+  ];
   const imageScales = [
     useTransform(scrollYProgress, [0, .22], [1.02, 1.12]),
     useTransform(scrollYProgress, [.15, .4], [1.12, 1.02]),
@@ -104,7 +111,7 @@ function LogisticsStory() {
         <div className="story-visual" aria-label="A continuous freight journey by truck, container, ship and aircraft">
           {visualScenes.map((scene, index) => (
             <motion.img key={scene.title} className={index === 4 ? "story-image story-network-image" : "story-image"}
-              src={scene.image} alt={scene.alt} style={{ opacity: imageOpacities[index], scale: imageScales[index], y: imageDrifts[index] }} />
+              src={scene.image} alt={scene.alt} style={{ opacity: imageOpacities[index], scale: imageScales[index], y: imageDrifts[index], clipPath: imageReveals[index] }} />
           ))}
           <div className="story-image-shade" />
           <div className="story-index"><span>HAUL X / THE JOURNEY</span><span>SCROLL TO EXPLORE</span></div>
