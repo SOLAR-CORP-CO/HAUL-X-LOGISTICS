@@ -1,4 +1,3 @@
-
 name: Install HAUL X starter project
 
 on:
@@ -13,6 +12,9 @@ jobs:
     steps:
       - name: Check out repository
         uses: actions/checkout@v4
+        with:
+          ref: main
+          fetch-depth: 0
 
       - name: Extract starter project
         run: |
@@ -30,7 +32,7 @@ jobs:
           if git diff --cached --quiet; then
             echo "No file changes to commit."
           else
-            git commit -m "Add HAUL X platform starter architecture"
-            git push
+            git commit -m "Update HAUL X website"
+            git pull --rebase origin main
+            git push origin main
           fi
-          
