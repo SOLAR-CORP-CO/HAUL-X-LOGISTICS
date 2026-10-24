@@ -1,12 +1,8 @@
-import hashlib
 import hmac
 import os
-import secrets
-import smtplib
 import time
 from collections import defaultdict, deque
 from datetime import datetime, timedelta, timezone
-from email.message import EmailMessage
 from uuid import uuid4
 
 import jwt
@@ -50,16 +46,6 @@ class Enquiry(BaseModel):
 class Login(BaseModel):
     email: EmailStr
     password: str = Field(min_length=1, max_length=200)
-
-
-class ResetRequest(BaseModel):
-    email: EmailStr
-
-
-class ResetComplete(BaseModel):
-    email: EmailStr
-    otp: str = Field(pattern=r"^\d{6}$")
-    new_password: str = Field(min_length=12, max_length=200)
 
 
 class Status(BaseModel):
@@ -121,33 +107,6 @@ def admin(authorization: str | None = Header(default=None)):
         raise HTTPException(401, "Session expired. Please sign in again.")
 
 
-def send_otp(email: str, otp: str):
-    required = ["SMTP_HOST", "SMTP_USER", "SMTP_APP_PASSWORD"]
-    if any(not os.getenv(name) for name in required):
-        raise HTTPException(503, "Password reset email is not configured.")
-    message = EmailMessage()
-    message["Subject"] = "HAUL X LOGISTICS admin password reset"
-    message["From"] = os.getenv("SMTP_FROM", os.getenv("SMTP_USER"))
-    message["To"] = email
-    message.set_content(
-        f"Your HAUL X LOGISTICS password reset code is {otp}. "
-        "It expires in 10 minutes and can only be used once. If you did not request this, ignore this email."
-    )
-    try:
-        with smtplib.SMTP(os.getenv("SMTP_HOST"), int(os.getenv("SMTP_PORT", "587")), timeout=15) as server:
-            server.starttls()
-            server.login(os.getenv("SMTP_USER"), os.getenv("SMTP_APP_PASSWORD"))
-            server.send_message(message)
-    except Exception:
-        raise HTTPException(503, "Unable to send the reset email right now.")
-
-
-def otp_digest(otp: str) -> str:
-    pepper = os.getenv("OTP_PEPPER", "")
-    if len(pepper) < 32:
-        raise HTTPException(503, "Password reset is not configured.")
-    return hmac.new(pepper.encode(), otp.encode(), hashlib.sha256).hexdigest()
-
 
 @router.post("/enquiries", status_code=201)
 def create(payload: Enquiry, request: Request):
@@ -193,61 +152,6 @@ def login(payload: Login, request: Request):
         secret, algorithm="HS256"
     )
     return {"access_token": token, "token_type": "bearer", "expires_in": 28800}
-
-
-@router.post("/admin/password-reset/request")
-def request_password_reset(payload: ResetRequest, request: Request):
-    limit(request, "password-reset-request", 3, 900)
-    email = configured_admin_email()
-    # Always return the same response to avoid account enumeration.
-    generic = {"message": "If the account is eligible, a reset code will be sent."}
-    if not hmac.compare_digest(payload.email.lower(), email):
-        return generic
-    try:
-        ensure_admin_account()
-        otp = f"{secrets.randbelow(1_000_000):06d}"
-        client = database()
-        client.table("admin_password_resets").update({"consumed_at": datetime.now(timezone.utc).isoformat()}).eq("email", email).is_("consumed_at", "null").execute()
-        client.table("admin_password_resets").insert({
-            "email": email,
-            "otp_hash": otp_digest(otp),
-            "expires_at": (datetime.now(timezone.utc) + timedelta(minutes=10)).isoformat(),
-            "attempts": 0,
-        }).execute()
-        send_otp(email, otp)
-    except Exception:
-        # Keep the public response generic; operational failures are visible in server logs.
-        return generic
-    return generic
-
-
-@router.post("/admin/password-reset/complete")
-def complete_password_reset(payload: ResetComplete, request: Request):
-    limit(request, "password-reset-complete", 5, 900)
-    email = configured_admin_email()
-    if not hmac.compare_digest(payload.email.lower(), email):
-        raise HTTPException(400, "Invalid or expired reset code.")
-    client = database()
-    now = datetime.now(timezone.utc)
-    rows = client.table("admin_password_resets").select("*").eq("email", email).is_("consumed_at", "null").order("created_at", desc=True).limit(1).execute().data or []
-    if not rows:
-        raise HTTPException(400, "Invalid or expired reset code.")
-    reset = rows[0]
-    expires = datetime.fromisoformat(reset["expires_at"].replace("Z", "+00:00"))
-    if expires <= now or int(reset.get("attempts", 0)) >= 5:
-        client.table("admin_password_resets").update({"consumed_at": now.isoformat()}).eq("id", reset["id"]).execute()
-        raise HTTPException(400, "Invalid or expired reset code.")
-    supplied = otp_digest(payload.otp)
-    if not hmac.compare_digest(supplied, reset["otp_hash"]):
-        attempts = int(reset.get("attempts", 0)) + 1
-        changes = {"attempts": attempts}
-        if attempts >= 5:
-            changes["consumed_at"] = now.isoformat()
-        client.table("admin_password_resets").update(changes).eq("id", reset["id"]).execute()
-        raise HTTPException(400, "Invalid or expired reset code.")
-    client.table("admin_accounts").update({"password_hash": _password_hasher.hash(payload.new_password), "updated_at": now.isoformat()}).eq("email", email).execute()
-    client.table("admin_password_resets").update({"consumed_at": now.isoformat()}).eq("id", reset["id"]).execute()
-    return {"message": "Password reset successfully. Please sign in again."}
 
 
 @router.get("/admin/enquiries")
