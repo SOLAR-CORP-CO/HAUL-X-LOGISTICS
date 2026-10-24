@@ -948,3 +948,35 @@ input::placeholder, textarea::placeholder {
  .footer>span{font-size:8px;letter-spacing:1.2px;margin-left:auto;text-align:right}
  .footer>p{width:100%;margin:0;text-align:right}
 }
+
+
+/* Global motion polish: consistent easing, less abrupt hover states */
+html{scroll-behavior:smooth;scroll-padding-top:84px}
+body{-webkit-font-smoothing:antialiased;text-rendering:optimizeLegibility}
+a,button,.service-card,.process-card,.choice-select,input,textarea,.scene-dot i,.story-link,.nav-cta,.primary-button,.submit-button{
+  transition-property:color,background-color,border-color,box-shadow,opacity,transform,filter;
+  transition-duration:.42s;
+  transition-timing-function:cubic-bezier(.22,1,.36,1);
+}
+button,a{-webkit-tap-highlight-color:transparent}
+button:active,.primary-button:active,.nav-cta:active{transition-duration:.12s}
+.solar-hero-backdrop{will-change:transform,filter;animation:solarHeroSettle 3.2s cubic-bezier(.16,1,.3,1) both}
+.cinematic-image-stage,.story-sticky,.network-visual{transform:translateZ(0);backface-visibility:hidden}
+.cinematic-image{backface-visibility:hidden;transform:translateZ(0);will-change:opacity,transform}
+.story-image{backface-visibility:hidden;transform:translate3d(0,0,0);will-change:opacity,transform,clip-path}
+.story-beat{will-change:opacity,transform;backface-visibility:hidden}
+.service-card,.process-card{transform:translateZ(0);backface-visibility:hidden}
+.route-path{animation-timing-function:linear;stroke-linecap:round;stroke-linejoin:round}
+.route-pulse{animation-timing-function:cubic-bezier(.16,1,.3,1);will-change:transform,opacity}
+.story-progress i{will-change:transform}
+@media(hover:hover){
+ .nav-links a:hover,.footer a:hover{transform:translateY(-1px)}
+ .story-play-link:hover span{transform:scale(1.08);border-color:#8be9ff;box-shadow:0 0 22px #38bdf855}
+ .scene-play:hover{background:#168bd655;border-color:#8be9ff}
+}
+@media(prefers-reduced-motion:reduce){
+ html{scroll-behavior:auto}
+ *,*::before,*::after{scroll-behavior:auto!important;animation-duration:.01ms!important;animation-iteration-count:1!important;transition-duration:.01ms!important}
+ .solar-hero-backdrop{animation:none;transform:none}
+ .story-image,.cinematic-image{transform:none!important}
+}
