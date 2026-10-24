@@ -1,6 +1,6 @@
 
-import { useEffect, useState, type FormEvent } from "react";
-import { motion } from "framer-motion";
+import { useEffect, useRef, useState, type FormEvent } from "react";
+import { motion, useScroll, useTransform } from "framer-motion";
 
 
 const cargoTypes = ["General cargo", "Fragile goods", "Electronics", "Perishable goods", "Machinery", "Hazardous goods", "Oversized cargo", "Other"];
@@ -48,6 +48,59 @@ function CinematicSequence() {
         </div>
       </div>
     </div>
+  );
+}
+
+function LogisticsStory() {
+  const storyRef = useRef<HTMLElement>(null);
+  const { scrollYProgress } = useScroll({ target: storyRef, offset: ["start start", "end end"] });
+  const roadOpacity = useTransform(scrollYProgress, [0, .08, .23, .31], [1, 1, 0, 0]);
+  const seaOpacity = useTransform(scrollYProgress, [.2, .31, .48, .58], [0, 1, 1, 0]);
+  const warehouseOpacity = useTransform(scrollYProgress, [.48, .59, .76, .86], [0, 1, 1, 0]);
+  const networkOpacity = useTransform(scrollYProgress, [.76, .87, 1], [0, 1, 1]);
+  const beats = [
+    { range: [0, .2], title: "Movement,\nwithout limits.", body: "From the first mile to the final hand-off, every shipment deserves a clearer way forward.", side: "left" },
+    { range: [.25, .48], title: "Connected\nby design.", body: "Road, sea and air come together in one coordinated view of your cargo journey.", side: "right" },
+    { range: [.52, .75], title: "Precision in\nevery hand-off.", body: "Thoughtful handling and clear communication keep the details moving with the shipment.", side: "left" },
+    { range: [.8, 1], title: "Your next move\nstarts here.", body: "Tell us where it needs to go. We’ll help you plan the route ahead.", side: "center" }
+  ];
+  const opacities = [
+    useTransform(scrollYProgress, [0, .04, .17, .23], [0, 1, 1, 0]),
+    useTransform(scrollYProgress, [.22, .29, .43, .51], [0, 1, 1, 0]),
+    useTransform(scrollYProgress, [.49, .56, .7, .78], [0, 1, 1, 0]),
+    useTransform(scrollYProgress, [.77, .84, .96, 1], [0, 1, 1, 1])
+  ];
+  const shifts = [
+    useTransform(scrollYProgress, [0, .08, .2], [32, 0, -24]),
+    useTransform(scrollYProgress, [.22, .3, .48], [32, 0, -24]),
+    useTransform(scrollYProgress, [.49, .57, .75], [32, 0, -24]),
+    useTransform(scrollYProgress, [.77, .85, 1], [24, 0, 0])
+  ];
+  return (
+    <section className="logistics-story" id="technology" ref={storyRef}>
+      <div className="story-sticky">
+        <div className="story-visual" aria-label="Road, ocean freight and warehouse logistics imagery">
+          <motion.img className="story-image" src={visualScenes[0].image} alt="Freight truck moving along a highway" style={{ opacity: roadOpacity }} />
+          <motion.img className="story-image" src={visualScenes[1].image} alt="Cargo containers aboard a global shipping vessel" style={{ opacity: seaOpacity }} />
+          <motion.img className="story-image" src={visualScenes[2].image} alt="Modern warehouse operations" style={{ opacity: warehouseOpacity }} />
+          <motion.img className="story-image story-network-image" src={visualScenes[1].image} alt="A global freight network connecting destinations" style={{ opacity: networkOpacity }} />
+          <div className="story-image-shade" />
+          <div className="story-index"><span>HAUL X / THE JOURNEY</span><span>SCROLL TO EXPLORE</span></div>
+          <div className="story-progress"><motion.i style={{ scaleX: scrollYProgress }} /></div>
+        </div>
+        <div className="story-copy-layer">
+          {beats.map((beat, index) => (
+            <motion.article key={beat.title} className={`story-beat story-beat-${beat.side}`} style={{ opacity: opacities[index], x: shifts[index] }}>
+              <span className="eyebrow">0{index + 1} / THE HAUL X APPROACH</span>
+              <h2>{beat.title.split("\\n").map((line) => <span key={line}>{line}</span>)}</h2>
+              <p>{beat.body}</p>
+              {index === 3 && <a className="story-link" href="#request">Plan a shipment <span>↗</span></a>}
+            </motion.article>
+          ))}
+        </div>
+        <div className="story-bottom-note">ROAD FREIGHT <i /> OCEAN CARGO <i /> WAREHOUSE OPERATIONS</div>
+      </div>
+    </section>
   );
 }
 
@@ -188,7 +241,7 @@ export default function App() {
           </div>
         </section>
 
-        <section className="stats-strip">
+        <LogisticsStory />\n\n        <section className="stats-strip">
           {[
             ["01", "ROAD FREIGHT"],
             ["02", "AIR CARGO"],
