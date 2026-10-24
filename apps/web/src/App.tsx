@@ -207,7 +207,7 @@ export default function App() {
     <div className="app">
       <motion.header className="navbar solar-navbar" initial={{ y: -50, opacity: 0 }} animate={{ y: 0, opacity: 1 }} transition={{ duration: 1, ease: [0.22, 1, 0.36, 1] }}>
         <a className="brand solar-brand" href="#" aria-label="Solar Corporation home">
-          <img src="/solar-logo.jpg" alt="Solar Corporation" />
+          <img src="/solar-logo.webp" alt="Solar Corporation" />
         </a>
         <nav className="nav-links" aria-label="Main navigation">
           <a href="#">Home</a><a href="#services">Services</a><a href="#technology">Our journey</a><a href="#network">Network</a><a href="#request">Contact</a>
