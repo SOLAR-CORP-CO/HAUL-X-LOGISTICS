@@ -61,20 +61,17 @@ export default function App() {
 
   function choices(items: string[], value: string, setter: (v: string) => void) {
     return (
-      <div className="choice-grid">
-        {items.map(item => (
-          <motion.button
-            type="button"
-            key={item}
-            className={`choice-card ${value === item ? "selected" : ""}`}
-            aria-pressed={value === item}
-            onClick={() => setter(item)}
-            whileHover={{ scale: 1.035, y: -3 }}
-            whileTap={{ scale: 0.96 }}
-          >
-            {value === item ? "✓ " : "+ "}{item}
-          </motion.button>
-        ))}
+      <div className="select-wrap">
+        <select
+          className="choice-select"
+          value={value}
+          onChange={(event) => setter(event.target.value)}
+        >
+          {items.map(item => (
+            <option key={item} value={item}>{item}</option>
+          ))}
+        </select>
+        <span className="select-chevron" aria-hidden="true">⌄</span>
       </div>
     );
   }
