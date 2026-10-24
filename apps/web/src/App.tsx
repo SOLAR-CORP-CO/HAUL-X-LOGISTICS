@@ -92,7 +92,7 @@ function LogisticsStory() {
           {beats.map((beat, index) => (
             <motion.article key={beat.title} className={`story-beat story-beat-${beat.side}`} style={{ opacity: opacities[index], x: shifts[index] }}>
               <span className="eyebrow">0{index + 1} / THE HAUL X APPROACH</span>
-              <h2>{beat.title.split("\\n").map((line) => <span key={line}>{line}</span>)}</h2>
+              <h2>{beat.title.split("\n").map((line) => <span key={line}>{line}</span>)}</h2>
               <p>{beat.body}</p>
               {index === 3 && <a className="story-link" href="#request">Plan a shipment <span>↗</span></a>}
             </motion.article>
