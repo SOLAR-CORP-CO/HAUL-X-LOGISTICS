@@ -16,8 +16,20 @@ services:
       - key: SUPABASE_SERVICE_ROLE_KEY
         sync: false
       - key: ADMIN_EMAIL
-        sync: false
-      - key: ADMIN_PASSWORD
+        value: pritammajumder0416@gmail.com
+      - key: ADMIN_INITIAL_PASSWORD
         sync: false
       - key: JWT_SECRET
         generateValue: true
+      - key: OTP_PEPPER
+        generateValue: true
+      - key: SMTP_HOST
+        value: smtp.gmail.com
+      - key: SMTP_PORT
+        value: "587"
+      - key: SMTP_USER
+        value: solar.corporation.co@gmail.com
+      - key: SMTP_FROM
+        value: solar.corporation.co@gmail.com
+      - key: SMTP_APP_PASSWORD
+        sync: false
