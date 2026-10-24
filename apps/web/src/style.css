@@ -856,3 +856,69 @@ input::placeholder, textarea::placeholder {
 @media(prefers-reduced-motion:reduce) {
  .story-image { transform:none; }
 }
+
+
+/* Solar Corporation cinematic landing experience */
+.solar-navbar{position:absolute;top:0;left:0;right:0;height:82px;padding:0 6.4%;background:linear-gradient(180deg,#020a12d9,transparent);border:0;backdrop-filter:blur(8px);z-index:60}
+.solar-brand{width:190px;height:54px;gap:0}
+.solar-brand img{display:block;width:100%;height:100%;object-fit:contain;object-position:left center}
+.solar-navbar .nav-links{color:#e4edf7}
+.solar-navbar .nav-links a{font-size:12px;letter-spacing:.25px}
+.solar-navbar .nav-links a:hover{color:#70d6ff}
+.solar-navbar .nav-cta{color:#f5fbff;border-color:#9bdfff99;padding:12px 22px}
+.solar-navbar .nav-cta span{color:#7bdcff;margin-left:12px}
+.solar-hero{height:min(900px,100svh);min-height:690px;padding:0 5.3%;display:flex;align-items:center;isolation:isolate;overflow:hidden;background:#030b14}
+.solar-hero::before{display:none}
+.solar-hero-backdrop{position:absolute;inset:0;z-index:-2;background-image:url('/solar-hero.png');background-size:cover;background-position:center 52%;transform:scale(1.015);animation:solarHeroSettle 2.2s cubic-bezier(.2,.7,.2,1) both}
+.solar-hero-vignette{position:absolute;inset:0;z-index:-1;background:linear-gradient(90deg,#020a12f2 0%,#020a12d9 24%,#020a1270 43%,transparent 72%),linear-gradient(0deg,#020a12c9 0%,transparent 25%,#020a1240 100%)}
+.solar-hero-copy{width:min(510px,42vw);margin-top:36px;position:relative;z-index:2}
+.solar-kicker{display:block;color:#b3c5d6;font-size:10px;letter-spacing:5px;margin-bottom:24px}
+.solar-hero h1{font-family:'Space Grotesk',sans-serif;font-size:clamp(48px,5.8vw,88px);font-weight:500;line-height:.99;letter-spacing:-.055em;margin:0;color:#f6f9fc}
+.solar-hero h1 em{font-style:normal;color:#55c8f5}
+.solar-hero-copy p{max-width:360px;color:#d2dce7;font-size:14px;line-height:1.75;margin:24px 0 27px}
+.solar-hero-actions{display:flex;align-items:center;gap:24px;flex-wrap:wrap}
+.solar-hero .primary-button{margin:0;border-radius:40px;padding:15px 25px;background:linear-gradient(105deg,#1688f5,#68d9f2);color:white;font-size:12px;box-shadow:0 8px 35px #087ad766}
+.solar-hero .primary-button span{margin-left:20px}
+.story-play-link{display:inline-flex;align-items:center;gap:12px;color:#f1f6fb;font-size:12px}
+.story-play-link span{width:36px;height:36px;display:grid;place-items:center;border:1px solid #ffffff88;border-radius:50%;font-size:10px;padding-left:2px}
+.solar-hero-meta{position:absolute;left:5.3%;right:6.5%;bottom:34px;display:grid;grid-template-columns:repeat(4,1fr);gap:16px;padding-top:16px;border-top:1px solid #ffffff72;color:#d5e2ed;font-size:9px;letter-spacing:1.6px}
+.solar-hero-meta span{position:relative;padding-left:20px}
+.solar-hero-meta span::before{content:"";position:absolute;left:0;top:1px;width:8px;height:8px;border:1px solid #ccefff;border-radius:50%;box-shadow:0 0 12px #43c5ff}
+.solar-scroll-cue{position:absolute;right:2.2%;bottom:38%;writing-mode:vertical-rl;display:flex;gap:12px;align-items:center;color:#d5e8f6;font-size:8px;letter-spacing:3px}
+.solar-scroll-cue span{font-size:16px;color:#65d3ff}
+.logistics-story{height:460vh}
+.story-sticky{min-height:560px}
+.story-image{filter:saturate(.82) contrast(1.04) brightness(.72);transition:filter .5s ease}
+.story-image-shade{background:linear-gradient(90deg,#030b16c9 0%,#030b1670 42%,#030b1620 100%),linear-gradient(0deg,#030b16c9 0%,transparent 44%,#030b1640 100%)}
+.story-progress i{will-change:transform}
+.stats-strip,.services,.network-section,.process,.request-section{scroll-margin-top:82px}
+@keyframes solarHeroSettle{from{transform:scale(1.07);filter:brightness(.7)}to{transform:scale(1.015);filter:brightness(1)}}
+@media(max-width:850px){
+ .solar-navbar{padding:0 5%;height:72px}
+ .solar-brand{width:160px}
+ .solar-hero{min-height:760px;height:92svh;padding:0 6%}
+ .solar-hero-backdrop{background-position:59% center}
+ .solar-hero-vignette{background:linear-gradient(90deg,#020a12e8 0%,#020a12a8 48%,#020a1230 100%),linear-gradient(0deg,#020a12d9 0%,transparent 45%)}
+ .solar-hero-copy{width:min(500px,75vw);margin-top:25px}
+ .solar-hero-meta{left:6%;right:6%;grid-template-columns:repeat(2,1fr);bottom:26px;row-gap:14px}
+ .solar-scroll-cue{right:3%;bottom:43%}
+}
+@media(max-width:600px){
+ .solar-navbar{height:66px;padding:0 5%}
+ .solar-brand{width:140px;height:45px}
+ .solar-navbar .nav-cta{font-size:10px;padding:10px 13px}
+ .solar-navbar .nav-links{display:none}
+ .solar-hero{height:calc(100svh - 0px);min-height:720px;padding:0 6% 120px;align-items:center}
+ .solar-hero-backdrop{background-position:61% center}
+ .solar-hero-vignette{background:linear-gradient(90deg,#020a12ed 0%,#020a12c9 58%,#020a1250 100%),linear-gradient(0deg,#020a12ef 0%,transparent 70%)}
+ .solar-hero-copy{width:88%;margin-top:45px}
+ .solar-kicker{font-size:8px;letter-spacing:3.5px;margin-bottom:18px}
+ .solar-hero h1{font-size:clamp(43px,12vw,64px)}
+ .solar-hero-copy p{font-size:13px;max-width:300px}
+ .solar-hero-meta{bottom:23px;gap:12px 8px;padding-top:13px;font-size:7px;letter-spacing:1px}
+ .solar-hero-meta span{padding-left:15px}
+ .solar-hero-meta span::before{width:6px;height:6px}
+ .solar-scroll-cue{display:none}
+ .story-sticky{min-height:540px}
+}
+@media(prefers-reduced-motion:reduce){.solar-hero-backdrop{animation:none}}
