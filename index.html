@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="theme-color" content="#080b18">
-<title>For Petra — Somewhere Between Two Skies</title>
+<title>One Question for Petra — Somewhere Between Two Skies</title>
 <style>
 :root{--bg:#080b18;--ink:#f6f2ff;--muted:#b8b4ca;--pink:#f3a9c8;--lav:#b8a9ff;--glass:rgba(255,255,255,.075);--line:rgba(255,255,255,.15)}
 *{box-sizing:border-box}
@@ -64,6 +64,18 @@ h1 em{font-weight:400;color:#f1bad2}
 .secret{max-height:0;opacity:0;overflow:hidden;transition:.8s ease;max-width:650px;margin:0 auto}
 .secret.show{max-height:260px;opacity:1;margin-top:35px}
 .secret p{font:italic 22px/1.7 Georgia,serif;color:#f0c7dc}
+.proposal{max-width:850px;margin:0 auto;padding:clamp(34px,7vw,76px) 24px;text-align:center}
+.proposal h2{font:400 clamp(43px,8vw,82px)/1.06 Georgia,serif;letter-spacing:-.045em;margin:12px 0 22px}
+.proposal h2 em{color:var(--pink);font-weight:400}
+.proposal .question-copy{max-width:620px;margin:0 auto;color:#d0cadb;font:clamp(17px,2.3vw,21px)/1.8 Georgia,serif}
+.proposal-actions{display:flex;justify-content:center;flex-wrap:wrap;gap:14px;margin-top:34px}
+.proposal-actions button{min-height:52px;padding:15px 24px;border-radius:99px;font:15px Georgia,serif;cursor:pointer;transition:.25s}
+.yes-btn{border:1px solid #f2b5d2;background:linear-gradient(135deg,#f1b3ce45,#b6a8ff35);color:#fff;box-shadow:0 8px 32px #e8a8cc20}
+.time-btn{border:1px solid var(--line);background:#ffffff0b;color:#e4dfee}
+.proposal-actions button:hover{transform:translateY(-3px);box-shadow:0 12px 35px #0004}
+.answer{display:none;max-width:620px;margin:28px auto 0;padding:22px;border:1px solid #ffffff20;border-radius:20px;background:#ffffff0a;color:#f1d8e5;font:italic 20px/1.7 Georgia,serif}
+.answer.show{display:block;animation:fadein .6s ease}
+@keyframes fadein{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
 footer{text-align:center;padding:30px 20px 45px;color:#77738d;font-size:10px;letter-spacing:.18em;text-transform:uppercase}
 .reveal{opacity:0;transform:translateY(28px);transition:opacity .9s,transform .9s}
 .reveal.visible{opacity:1;transform:translateY(0)}
@@ -73,14 +85,14 @@ footer{text-align:center;padding:30px 20px 45px;color:#77738d;font-size:10px;let
 </head>
 <body>
 <canvas id="stars"></canvas><div class="noise"></div>
-<nav aria-label="Page navigation"><a href="#story">THE STORY</a><a href="#words">A FEW WORDS</a><a href="#you">YOU</a></nav>
+<nav aria-label="Page navigation"><a href="#story">THE STORY</a><a href="#words">A FEW WORDS</a><a href="#you">YOU</a><a href="#question">THE QUESTION</a></nav>
 <main>
 <section class="hero" id="top">
   <div class="orbit-wrap"><div class="orbit"><i class="planet"></i></div></div>
   <div class="hero-inner" id="heroParallax">
-    <div class="eyebrow">A little universe, made for Petra</div>
+    <div class="eyebrow">A little universe, with one question</div>
     <h1>Somewhere<br>between <em>two skies.</em></h1>
-    <p class="subtitle">For the girl in Bucharest who somehow made a boy in Kolkata look at the stars a little differently.</p>
+    <p class="subtitle">For the girl in Bucharest who somehow made a boy in Kolkata look at the stars a little differently — and gave him something important to ask.</p>
     <div class="scroll-hint">A small thing, from me to you <span>↓</span></div>
   </div>
 </section>
@@ -143,15 +155,23 @@ footer{text-align:center;padding:30px 20px 45px;color:#77738d;font-size:10px;let
   </div>
 </section>
 
-<section class="final reveal">
-  <div class="eyebrow">For you, always with affection</div>
-  <h2>Te iubesc,<br><em style="color:var(--pink);font-weight:400">Petra.</em></h2>
-  <p>Whatever the distance says, I hope this little corner of the internet reminds you that someone in Kolkata is thinking of you, smiling at your messages, and sending a little warmth your way.</p>
-  <button class="heart-btn" id="heartButton">A tiny surprise ♡</button>
-  <div class="secret" id="secret"><p>And if I could send you one thing right now, it wouldn't be a grand gift. It would be a quiet moment beside you, a little smile, and enough time to make you laugh. Until then, here's my heart — travelling the distance.</p></div>
+<section class="final reveal" id="question">
+  <div class="glass proposal">
+    <div class="eyebrow">One last thing, Petra</div>
+    <div class="kicker">Not an assumption. A question. ♡</div>
+    <h2>Would you let me<br><em>call you mine?</em></h2>
+    <p class="question-copy">Somewhere along the way, you became more than just someone I look forward to talking to. I like you — genuinely, ridiculously, and more than I know how to fit into one little website. I don't want to assume what you feel, so I'd rather ask you properly…</p>
+    <h2 style="font-size:clamp(31px,5vw,48px);margin-top:34px">Petra, will you be my girlfriend?</h2>
+    <div class="proposal-actions">
+      <button class="yes-btn" id="yesButton">Yes, I'd love to ♡</button>
+      <button class="time-btn" id="timeButton">I need a little time</button>
+    </div>
+    <div class="answer" id="yesAnswer" role="status">You have no idea how happy that makes me. Here's to seeing where this little story takes us. ♡</div>
+    <div class="answer" id="timeAnswer" role="status">Of course. Take all the time you need — no pressure, and no answer is owed before you're ready. I'm glad I got to be honest with you. ♡</div>
+  </div>
 </section>
 </main>
-<footer>Made with care · From Kolkata to Bucharest · For Petra ♡</footer>
+<footer>Made with care · From Kolkata to Bucharest · With hope, for Petra ♡</footer>
 <script>
 const canvas=document.getElementById('stars'),ctx=canvas.getContext('2d');let w,h,stars=[];
 function resize(){w=canvas.width=innerWidth*devicePixelRatio;h=canvas.height=innerHeight*devicePixelRatio;canvas.style.width=innerWidth+'px';canvas.style.height=innerHeight+'px';stars=Array.from({length:Math.min(170,Math.floor(innerWidth/7))},()=>({x:Math.random()*w,y:Math.random()*h,r:Math.random()*1.5+.25,a:Math.random()*.65+.15,p:Math.random()*6.28}))}
@@ -162,6 +182,9 @@ document.querySelectorAll('.reveal').forEach(el=>observer.observe(el));
 const hero=document.getElementById('heroParallax');
 addEventListener('pointermove',e=>{if(innerWidth>700){const x=(e.clientX/innerWidth-.5)*8,y=(e.clientY/innerHeight-.5)*-8;hero.style.transform=`perspective(900px) rotateY(${x}deg) rotateX(${y}deg)`}});
 document.getElementById('heartButton').addEventListener('click',()=>{document.getElementById('secret').classList.toggle('show');document.getElementById('heartButton').textContent=document.getElementById('secret').classList.contains('show')?'A little more love ♡':'A tiny surprise ♡'});
+const yesAnswer=document.getElementById('yesAnswer'),timeAnswer=document.getElementById('timeAnswer');
+document.getElementById('yesButton').addEventListener('click',()=>{timeAnswer.classList.remove('show');yesAnswer.classList.add('show')});
+document.getElementById('timeButton').addEventListener('click',()=>{yesAnswer.classList.remove('show');timeAnswer.classList.add('show')});
 document.querySelectorAll('.note-card').forEach(card=>{card.addEventListener('pointermove',e=>{if(innerWidth<700)return;const r=card.getBoundingClientRect(),x=(e.clientX-r.left)/r.width-.5,y=(e.clientY-r.top)/r.height-.5;card.style.transform=`perspective(800px) rotateY(${x*5}deg) rotateX(${-y*5}deg) translateY(-3px)`});card.addEventListener('pointerleave',()=>card.style.transform='')});
 </script>
 </body>
